@@ -1,18 +1,20 @@
 {
-    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
-    "tasks.max": "1",
-    "database.hostname": "order-db",
-    "database.port": "5432",
-    "database.user": "postgresuser",
-    "database.password": "postgrespw",
-    "database.dbname" : "orderdb",
-    "topic.prefix": "dbserver1",
-    "schema.include.list": "inventory",
-    "table.include.list" : "inventory.outboxevent",
-    "tombstones.on.delete" : "false",
-    "transforms" : "outbox",
-    "transforms.outbox.type" : "io.debezium.transforms.outbox.EventRouter",
-    "transforms.outbox.route.topic.replacement" : "${routedByValue}.events",
-    "transforms.outbox.table.field.event.timestamp" : "timestamp",
-    "transforms.outbox.table.fields.additional.placement" : "type:header:eventType"
+    "name": "orders-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "database.hostname": "order-db",
+        "database.port": "5432",
+        "database.user": "postgresuser",
+        "database.password": "postgrespw",
+        "database.dbname" : "orderdb",
+        "schema.include.list": "inventory",
+        "table.include.list" : "inventory.outbox",
+        "topic.prefix": "orders",
+        "transforms" : "outbox",
+        "transforms.outbox.type" : "io.debezium.transforms.outbox.EventRouter",
+        "transforms.outbox.table.expand.json.payload": "true",
+        "transforms.outbox.route.topic.replacement" : "outbox.${routedByValue}",
+        "transforms.outbox.table.fields.additional.placement" : "type:header:eventType",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter"
+    }
 }

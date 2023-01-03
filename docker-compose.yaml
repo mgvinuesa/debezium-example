@@ -43,6 +43,15 @@ services:
     restart: always
     ports:
       - 8090:8080
+  order-service:
+    build: ./order-service
+    environment:
+      SPRING_PROFILES_ACTIVE: "docker" 
+      SPRING_DATASOURCE_URL: jdbc:postgresql://order-db:5432/orderdb?currentSchema=inventory
+    ports:
+      - "8080:8080"
+    depends_on:
+      - order-db
   order-db:
     image: quay.io/debezium/example-postgres:2.1.1.Final
     ports:
