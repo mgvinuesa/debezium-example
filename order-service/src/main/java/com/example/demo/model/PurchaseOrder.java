@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,4 +52,8 @@ public class PurchaseOrder {
 
 		throw new EntityNotFoundException("Order does not contain line with id " + orderLineId);
 	}
+	
+	public BigDecimal getTotalValue() {
+        return lineItems.stream().map(OrderLine::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 }
